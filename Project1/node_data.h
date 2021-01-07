@@ -10,7 +10,7 @@ namespace shinary_CFD_project
 	class _node_data_base
 	{
 	protected:
-		typedef _node_data_base<DATA_COMMON, DATA_RESIDUAL> TYPE;
+		typedef _node_data_base<DATA_COMMON, DATA_RESIDUAL> SELF;
 		typedef typename DATA_COMMON::data_type data_type;
 	protected:
 		DATA_COMMON* m_data_common;
@@ -30,12 +30,11 @@ namespace shinary_CFD_project
 			delete m_residual;
 		}
 	protected:
-		DATA_COMMON& getDataCommon() { return *m_data_common; }
-		DATA_RESIDUAL& getDataNeedResidual() { return *m_data_need_residual; }
+
 		DATA_RESIDUAL& getResidual() { return *m_residual; }
 		virtual bool operator>(const data_type& compare)const = 0;
 		virtual std::ostream& operator<<(std::ostream& out) = 0;
-		virtual void operator=(const TYPE& residual_input) = 0;
+		virtual void operator=(const SELF& residual_input) = 0;
 	};
 	//需要重载的操作符
 	template<class TYPE, class T>
@@ -52,8 +51,6 @@ namespace shinary_CFD_project
 	//需要计算残差的参数基类
 	template<class TYPE, class T>
 	class _data_need_residual_base :private __data_node_operations<TYPE, T> {};
-	//节点参数基类
-
 	////残差内的数据结构体
 	//template<class T>
 	//struct _residual_data
