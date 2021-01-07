@@ -26,13 +26,13 @@ namespace shinary_CFD_project
 		//节点通过一个数组管理
 		data_type m_nodes;
 		basic_mesh_info& mesh_info;
-		residual<node_data_type> m_residual;
+		//residual<node_data_type> m_residual;
 	public:
 		data_type& getData() { return m_nodes; }
 		basic_mesh_info& getMeshInfo() { return mesh_info; }
 		pointer begin() { return &(m_nodes.front()); }
 		pointer end() { return &(m_nodes.back()); }
-		residual<node_data_type>& getResidual() { return m_residual; };
+		//residual<node_data_type>& getResidual() { return m_residual; };
 	};
 #endif // !MESH
 }

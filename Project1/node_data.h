@@ -13,29 +13,34 @@ namespace shinary_CFD_project
 		typedef _node_data_base<DATA_COMMON, DATA_RESIDUAL> SELF;
 		typedef typename DATA_COMMON::data_type data_type;
 	protected:
-		DATA_COMMON* m_data_common;
-		DATA_RESIDUAL* m_data_need_residual;
+		struct _data {
+			DATA_COMMON* m_data_common;
+			DATA_RESIDUAL* m_data_need_residual;
+		}m_data_set;
+		typedef _data node_data_set_type;
 		DATA_RESIDUAL* m_residual;
 	protected:
 		_node_data_base()
 		{
-			m_data_common = new DATA_COMMON;
-			m_data_need_residual = new DATA_RESIDUAL;
+			m_data_set.m_data_common = new DATA_COMMON;
+			m_data_set.m_data_need_residual = new DATA_RESIDUAL;
 			m_residual = new DATA_RESIDUAL;
 		}
 		virtual ~_node_data_base()
 		{
-			delete m_data_common;
-			delete m_data_need_residual;
+			delete m_data_set.m_data_common;
+			delete m_data_set.m_data_need_residual;
 			delete m_residual;
 		}
-	protected:
-
-		DATA_RESIDUAL& getResidual() { return *m_residual; }
-		virtual bool operator>(const data_type& compare)const = 0;
+	public:
+		virtual node_data_set_type& getData() { return m_data_set; }
+		virtual node_data_set_type getData() const{ return m_data_set; }
+		virtual DATA_RESIDUAL& getResidual() { return *m_residual; }
+		//virtual bool operator>(const data_type& compare)const = 0;
 		virtual std::ostream& operator<<(std::ostream& out) = 0;
 		virtual void operator=(const SELF& residual_input) = 0;
 	};
+
 	//需要重载的操作符
 	template<class TYPE, class T>
 	class __data_node_operations

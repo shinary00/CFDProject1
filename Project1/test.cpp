@@ -24,7 +24,8 @@ int main()
 	//int iterations = post_process.getIterationNumber();
 	//post_process.~post_processing();
 	//std::cout << "Iterations : " << iterations << std::endl;
-	node_data<_data_common<int>, _data_need_residual<int>> node_data_temp1;
-	node_data<_data_common<int>, _data_need_residual<int>> node_data_temp2;
-	//node_data_temp1 > 1;
+
+	node_data_set1<double> testnode1;
+	node_data_set1<double> testnode1;
+	std::cout << testnode1;
 }

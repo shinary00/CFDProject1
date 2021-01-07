@@ -17,7 +17,7 @@ namespace shinary_CFD_project
 		typedef _data_common<T> SELF;
 		typedef T data_type;
 	public:
-		bool operator>(const T& compare)const override
+		bool operator>(const data_type& compare)const override
 		{
 			return (_L > compare) &&
 				(_delta_t > compare) &&
@@ -54,7 +54,7 @@ namespace shinary_CFD_project
 		typedef _data_need_residual<T> SELF;
 		typedef T data_type;
 	public:
-		bool operator>(const T& compare)const override
+		bool operator>(const data_type& compare)const override
 		{
 			return (_Rho > compare) &&
 				(_Temperature > compare) &&
@@ -91,21 +91,22 @@ namespace shinary_CFD_project
 		typedef node_data_set1<T> SELF;
 		typedef T data_type;
 		typedef _node_data_base<_data_common<T>, _data_need_residual<T>> base_type;
+		typedef typename base_type::node_data_set_type node_data_set_type;
 	public:
-		node_data_set1() :base_type() {};
+		//node_data_set1() :base_type() {};
 	public:
-		getData()
-		bool operator>(const data_type& compare)const
+		node_data_set_type& getData()override { return base_type::getData(); }
+		node_data_set_type getData()const override { return base_type::getData(); }
+		/*bool operator>(const data_type& compare)const override
 		{
-			return (base_type::m_data_common > compare) && (base_type::m_data_need_residual > compare);
-		}
-		friend std::ostream& operator<<(std::ostream& out, SELF& obj)
+			return (*(base_type::getData().m_data_common) > compare) && (*(base_type::getData().m_data_need_residual) > compare);
+		}*/
+		virtual std::ostream& operator<<(std::ostream& out) override { return (*(getData().m_data_need_residual)).operator<<((*(getData().m_data_common)).operator<<(out)); };
+		friend std::ostream& operator<<(std::ostream& out, SELF& obj) { obj << out; return out; }
+		void operator=(const base_type& node_data_input)override
 		{
-			obj.<<out;
-		}
-		void operator=(const SELF& residual_input)
-		{
-			;
+			*(getData().m_data_common)= *(node_data_input.getData().m_data_common);
+			*(getData().m_data_need_residual) = *(node_data_input.getData().m_data_need_residual);
 		}
 	};
 	////²Ð²îÀàÊµÏÖ

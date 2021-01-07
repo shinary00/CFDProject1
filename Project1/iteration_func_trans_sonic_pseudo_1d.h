@@ -83,7 +83,7 @@ namespace shinary_CFD_project
 	};
 
 	//残差整理
-	template<class Mesh>
+	/*template<class Mesh>
 	_data_need_residual<typename Mesh::value_type::node_data_type>
 		_find_max_residual_(Mesh mesh_input)
 	{
@@ -99,7 +99,7 @@ namespace shinary_CFD_project
 			max_residual.getResidualData()._Velocity_residual = max_residual.getResidualData()._Velocity_residual < element.getResidual().getResidualData()._Velocity_residual ? element.getResidual().getResidualData()._Velocity_residual: max_residual.getResidualData()._Velocity_residual;
 		}
 		return max_residual;
-	}
+	}*/
 	//迭代函数
 	template<class Mesh>
 	class trans_sonic_pseudo_1d :public iteration_func_base<Mesh>
