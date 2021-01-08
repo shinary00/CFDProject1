@@ -8,6 +8,8 @@ namespace shinary_CFD_project
 	template<class T>
 	class _data_common :public _data_common_base<_data_common<T>, T>
 	{
+		template<class Mesh>
+		friend class iteration_func_base;
 	private:
 		T _L = 0;
 		T _delta_t = 0;
@@ -34,6 +36,8 @@ namespace shinary_CFD_project
 	template<class T>
 	class _data_need_residual :public _data_need_residual_base<_data_need_residual<T>, T>
 	{
+		template<class Mesh>
+		friend class iteration_func_base;
 	private:
 		T _Rho = 0;
 		T _Temperature = 0;
