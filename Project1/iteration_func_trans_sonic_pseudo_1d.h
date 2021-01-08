@@ -66,7 +66,7 @@ namespace shinary_CFD_project
 			int i = 0;
 			for (auto node = iteration_func_base<Mesh>::_mesh.begin(); node <= iteration_func_base<Mesh>::_mesh.end(); node++)
 			{
-				node->_L = i * iteration_func_base<Mesh>::_mesh.getMeshInfo().delta_x;
+				node->_L  = i * iteration_func_base<Mesh>::_mesh.getMeshInfo().delta_x;
 				node->_Area = 1 + 2.2 * (node->_L - 1.5) * (node->_L - 1.5);
 				node->_Rho = 1 - 0.314 * node->_L;
 				node->_Temperature = 1 - 0.2314 * node->_L;

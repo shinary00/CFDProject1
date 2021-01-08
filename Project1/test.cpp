@@ -25,7 +25,8 @@ int main()
 	//post_process.~post_processing();
 	//std::cout << "Iterations : " << iterations << std::endl;
 
+	//mesh<node_data_set1<double>, 3, _data_need_residual> mesh1(mesh_info);
 	node_data_set1<double> testnode1;
-	node_data_set1<double> testnode1;
+	node_data_set1<double> testnode2;
 	std::cout << testnode1;
 }

@@ -5,8 +5,6 @@ using namespace shinary_CFD_project;
 
 namespace shinary_CFD_project
 {
-#ifndef ITERATION_ALGORITHM_BASE
-#define ITERATION_ALGORITHM_BASE
 	template<class Mesh>
 	class iteration_algorithm_base //算法基类
 	{
@@ -14,12 +12,13 @@ namespace shinary_CFD_project
 		typedef iteration_func_base<Mesh> Func;
 		typedef typename Mesh::value_type::node_data_type node_data_type;
 	protected:
-		//这是参与迭代的网格
+		//参与迭代的网格
 		Mesh& iteration_mesh;
-		//这是参与迭代的微分方程处理函数指针
+		//参与迭代的微分方程处理函数指针
 		Func& iteration_func;
+		//初始化函数指针
 		Func& initialization_func;
-		//计算精度
+		//设定的计算精度
 		node_data_type precision;
 	protected:
 		//初始化
@@ -27,7 +26,6 @@ namespace shinary_CFD_project
 		//进行一次迭代
 		virtual void executeIteration() = 0;
 	public:
-		virtual ~iteration_algorithm_base() {};
 		//Ctor
 		iteration_algorithm_base(Mesh& mesh, Func& func0, Func& func1, node_data_type precision_input) :iteration_mesh(mesh), iteration_func(func1), initialization_func(func0), precision(precision_input){};
 	};
@@ -47,9 +45,15 @@ namespace shinary_CFD_project
 	public:
 		//初始化
 		virtual void initialization() { Algorithm::initialization_func.execute(); };
-		//进行一次迭代
-		void executeIteration() override { Algorithm::iteration_func.execute(); };
+		//得到设定精度
 		node_data_type getPrecision() const { return Algorithm::precision; }
+		//迭代
+		void executeIteration() override ;
 	};
-#endif // !ITERATION_ALGORITHM_BASE
+	//迭代实现
+	template<class Mesh>
+	inline void MM_Pushing_Algorithm<Mesh>::executeIteration()
+	{
+		Algorithm::iteration_func.execute();
+	}
 }

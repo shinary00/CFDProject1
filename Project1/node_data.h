@@ -3,91 +3,64 @@
 
 namespace shinary_CFD_project
 {
-#ifndef NODE_DATA
-#define NODE_DATA
-	//节点基类
-	template<class DATA_COMMON, class DATA_RESIDUAL>
-	class _node_data_base
-	{
-	protected:
-		typedef _node_data_base<DATA_COMMON, DATA_RESIDUAL> SELF;
-		typedef typename DATA_COMMON::data_type data_type;
-	protected:
-		struct _data {
-			DATA_COMMON* m_data_common;
-			DATA_RESIDUAL* m_data_need_residual;
-		}m_data_set;
-		typedef _data node_data_set_type;
-		DATA_RESIDUAL* m_residual;
-	protected:
-		_node_data_base()
-		{
-			m_data_set.m_data_common = new DATA_COMMON;
-			m_data_set.m_data_need_residual = new DATA_RESIDUAL;
-			m_residual = new DATA_RESIDUAL;
-		}
-		virtual ~_node_data_base()
-		{
-			delete m_data_set.m_data_common;
-			delete m_data_set.m_data_need_residual;
-			delete m_residual;
-		}
-	public:
-		virtual node_data_set_type& getData() { return m_data_set; }
-		virtual node_data_set_type getData() const{ return m_data_set; }
-		virtual DATA_RESIDUAL& getResidual() { return *m_residual; }
-		//virtual bool operator>(const data_type& compare)const = 0;
-		virtual std::ostream& operator<<(std::ostream& out) = 0;
-		virtual void operator=(const SELF& residual_input) = 0;
-	};
-
 	//需要重载的操作符
 	template<class TYPE, class T>
-	class __data_node_operations
+	class __residual_node_operations
 	{
 	protected:
 		virtual bool operator>(const T& compare)const = 0;
 		virtual std::ostream& operator<<(std::ostream& out) = 0;
 		virtual void operator=(const TYPE& residual_input) = 0;
 	};
+	template<class TYPE, class T>
+	class __common_node_operations
+	{
+	protected:
+		virtual std::ostream& operator<<(std::ostream& out) = 0;
+		virtual void operator=(const TYPE& residual_input) = 0;
+	};
 	//不计算残差的参数基类
 	template<class TYPE, class T>
-	class _data_common_base :private __data_node_operations<TYPE, T> {};
+	class _data_common_base :private __common_node_operations<TYPE, T> {};
 	//需要计算残差的参数基类
 	template<class TYPE, class T>
-	class _data_need_residual_base :private __data_node_operations<TYPE, T> {};
-	////残差内的数据结构体
-	//template<class T>
-	//struct _residual_data
-	//{
-	//	T _Rho_residual = 1;
-	//	T _Temperature_residual = 1;
-	//	T _Velocity_residual = 1;
-	//	T _partial_Rho_partial_t_residual = 1;
-	//	T _partial_Velocity_partial_t_residual = 1;
-	//	T _partial_Temperature_partial_t_residual = 1;
-	//};
-
-	////残差类基类
-	//template<class RESIDUAL>
-	//class _residual_base 
-	//{
-	//protected:
-	//	RESIDUAL* m_residual_data;
-	//protected:
-	//	_residual_base() { m_residual_data = new RESIDUAL; }
-	//	virtual ~_residual_base() { delete m_residual_data; }
-	//	RESIDUAL& getResidualData() { return *m_residual_data; }
-	//	RESIDUAL getResidualData()const { return *m_residual_data; }
-	//};
-
-	////网格节点基类
-	//template<class T>
-	//struct _node_data_base
-	//{
-	//protected:
-	//	typedef T node_data_type;
-	//};
-#endif // !NODE_DATA
+	class _data_need_residual_base :private __residual_node_operations<TYPE, T> {};
+	//节点数据组
+	template<class DATA_COMMON, class DATA_RESIDUAL>
+	class _node_base;//友元提前声明
+	template<class DATA_COMMON, class DATA_RESIDUAL>
+	class _node_data_set
+	{
+	public:
+		friend class _node_base<DATA_COMMON, DATA_RESIDUAL>;
+	private:
+		DATA_COMMON m_data_common;
+		DATA_RESIDUAL m_data_need_residual;
+		DATA_RESIDUAL m_residual;
+	};
+	//节点基类
+	template<class DATA_COMMON, class DATA_RESIDUAL>
+	class _node_base :
+		private __common_node_operations<
+		_node_base<DATA_COMMON, DATA_RESIDUAL>,
+		typename DATA_COMMON::node_data_type>
+	{
+	public:
+		typedef _node_base<DATA_COMMON, DATA_RESIDUAL> SELF;
+		typedef typename DATA_COMMON::node_data_type node_data_type;
+		typedef _node_data_set<DATA_COMMON, DATA_RESIDUAL> node_data_set;
+	private:
+		_node_data_set<DATA_COMMON, DATA_RESIDUAL>* m_data_set;
+	public:
+		_node_base() { m_data_set = new node_data_set; }
+		virtual ~_node_base() { delete m_data_set; }
+	public:
+		virtual node_data_set& getData() { return *m_data_set; }
+		virtual node_data_set getData() const { return *m_data_set; }
+		virtual DATA_RESIDUAL& getResidual() { return getData().m_residual; }
+		virtual std::ostream& operator<<(std::ostream& out)override { return (getData().m_data_need_residual).operator<<((getData().m_data_common).operator<<(out)); }
+		void operator=(const SELF& node_data_input) override { getData() = node_data_input.getData();
+		}
+	};
 }
 

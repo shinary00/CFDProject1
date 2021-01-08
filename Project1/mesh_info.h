@@ -3,8 +3,7 @@
 
 namespace shinary_CFD_project
 {
-#ifndef BASIC_MESH_INFO
-#define BASIC_MESH_INFO
+	//包含科朗数、空间步长等基本常量
 	struct basic_mesh_info
 	{
 	public:
@@ -15,5 +14,4 @@ namespace shinary_CFD_project
 		double gamma = 1.4;
 		double Courant_Number = 1.1;
 	} static mesh_info;
-#endif // !MESH_INFO
 }
