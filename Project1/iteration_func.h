@@ -44,7 +44,7 @@ inline typename Node::node_data_type& ##__PROPERTY__##_map(\
 
 	//º∆À„delta_t
 	template<class node>
-	inline void _delta_t_calculation(node& node_input){__delta_t_calculation(node_input, mesh_info);}
+	inline void _delta_t_calculation(node& node_input){__delta_t_calculation(node_input, basic_mesh_info());}
 
 	template<class node, class basic_mesh_info>
 	inline void __delta_t_calculation(node& node_input, basic_mesh_info& info) { node_input._delta_t = info.Courant_Number * info.delta_x / (node_input._Velocity + sqrt(node_input._Temperature)); }

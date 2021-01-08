@@ -5,8 +5,9 @@ using namespace shinary_CFD_project;
 
 namespace shinary_CFD_project
 {
+	//算法基类
 	template<class Mesh>
-	class iteration_algorithm_base //算法基类
+	class iteration_algorithm_base 
 	{
 	protected:
 		typedef iteration_func_base<Mesh> Func;
@@ -42,7 +43,6 @@ namespace shinary_CFD_project
 		//CopyCtor
 		MM_Pushing_Algorithm(const MM_Pushing_Algorithm<Mesh>& algorithm_input) : Algorithm(algorithm_input.iteration_mesh, algorithm_input.initialization_func, algorithm_input.iteration_func, algorithm_input.precision) {};
 	public:
-	public:
 		//初始化
 		virtual void initialization() { Algorithm::initialization_func.execute(); };
 		//得到设定精度
@@ -54,6 +54,7 @@ namespace shinary_CFD_project
 	template<class Mesh>
 	inline void MM_Pushing_Algorithm<Mesh>::executeIteration()
 	{
+
 		Algorithm::iteration_func.execute();
 	}
 }
